@@ -1,0 +1,42 @@
+# Ignore virtual environment
+venv/
+env/
+
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+*$PYTHONHASHSEED
+
+# Ignore database files
+*.sqlite3
+db.sqlite3
+
+# Ignore Django secret key & environment variables
+*.env
+.env
+
+# Ignore compiled files
+*.pyc
+*.pyo
+*.log
+
+# Ignore static and media files (if generated dynamically)
+staticfiles/
+media/
+
+# Ignore migrations (optional, if regenerating)
+**/migrations/*.py
+!**/migrations/__init__.py
+
+# Ignore IDE/editor files
+.vscode/
+.idea/
+*.swp
+
+# Ignore dependencies (if using pipenv or poetry)
+Pipfile
+Pipfile.lock
+poetry.lock
+
+# Ignore node_modules (if using frontend dependencies)
+node_modules/
