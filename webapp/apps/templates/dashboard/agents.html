@@ -1,0 +1,181 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    {% block css %}
+    <link rel="stylesheet" href="{% static 'css/styles1.css' %}">
+    {% endblock %}
+</head>
+<body>
+    <main class="content px-3 py-4"><div class="container mt-5">
+        <h3 class="fw-bold fs-4 mb-3"></h3>    
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="container mt-6">
+                <h3 class="fw-bold fs-4 mb-3">Agents</h3>
+                <div class="table-responsive">
+                    <div class="card shadow">
+                        <div class="card-body py-7">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-header">
+                                    <tr class="highlight">
+                                        <th scope="col">Agent ID</th>
+                                        <th scope="col">Model</th>
+                                        <th scope="col">User</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Last Check-in</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Agent 1 -->
+                                    <tr>
+                                        <a href="#" class="agent-link">
+                                            <td class="agent-name">AG-1001</td>
+                                        </a>
+                                        <td>Windows Endpoint</td>
+                                        <td>jsmith@example.com</td>
+                                        <td>
+                                            <span class="d-inline-block rounded-circle bg-success" style="width: 12px; height: 12px;" title="Online"></span>
+                                        </td>
+                                        <td>2 minutes ago</td>
+                                    </tr>
+                                    
+                                    <!-- Agent 2 -->
+                                    <tr>
+                                        <a href="#" class="agent-link">
+                                            <td class="agent-name">AG-1002</td>
+                                        </a>
+                                        <td>Linux Server</td>
+                                        <td>mjohnson@example.com</td>
+                                        <td>
+                                            <span class="status-indicator status-off"></span>
+                                            <span class="d-inline-block rounded-circle bg-danger" style="width: 12px; height: 12px;"></span>
+                                        </td>
+                                        <td>1 hour ago</td>
+                                    </tr>
+                                    
+                                    <!-- Agent 3 -->
+                                    <tr>
+                                        <a href="#" class="agent-link">
+                                            <td class="agent-name">AG-1003</td>
+                                        </a>
+                                        <td>Network Sensor</td>
+                                        <td>System Account</td>
+                                        <td>
+                                            <span class="d-inline-block rounded-circle bg-danger" style="width: 12px; height: 12px;"></span>
+                                        </td>
+                                        <td>5 minutes ago</td>
+                                    </tr>
+                                    
+                                    <!-- Agent 4 -->
+                                    <tr>
+                                        <a href="#" class="agent-link">
+                                            <td class="agent-name">AG-1004</td>
+                                        </a>
+                                        <td>Cloud Collector</td>
+                                        <td>awilliams@example.com</td>
+                                        <td>
+                                            <span class="d-inline-block rounded-circle bg-success" style="width: 12px; height: 12px;" title="Online"></span>
+                                        </td>
+                                        <td>3 minutes ago</td>
+                                    </tr>
+                                    
+                                    <!-- Agent 5 -->
+                                    <tr>
+                                        <a href="#" class="agent-link">
+                                            <td class="agent-name">AG-1005</td>
+                                        </a>
+                                        <td>Database Monitor</td>
+                                        <td>dbadmin@example.com</td>
+                                        <td>
+                                            <span class="d-inline-block rounded-circle bg-danger" style="width: 12px; height: 12px;"></span>
+                                        </td>
+                                        <td>45 minutes ago</td>
+                                    </tr>
+                                     <!-- Agent 6 -->
+                                     <tr>
+                                        <a href="#" class="agent-link">
+                                            <td class="agent-name">AG-1006</td>
+                                        </a>
+                                        <td>Windows Endpoint</td>
+                                        <td>jsmith@example.com</td>
+                                        <td>
+                                            <span class="d-inline-block rounded-circle bg-success" style="width: 12px; height: 12px;" title="Online"></span>
+                                        </td>
+                                        <td>2 minutes ago</td>
+                                    </tr>
+                                    
+                                    <!-- Agent 7 -->
+                                    <tr>
+                                        <a href="#" class="agent-link">
+                                            <td class="agent-name">AG-1007</td>
+                                        </a>
+                                        <td>Linux Server</td>
+                                        <td>mjohnson@example.com</td>
+                                        <td>
+                                            <span class="status-indicator status-off"></span>
+                                            <span class="d-inline-block rounded-circle bg-danger" style="width: 12px; height: 12px;"></span>
+                                        </td>
+                                        <td>1 hour ago</td>
+                                    </tr>
+                                    
+                                    <!-- Agent 8 -->
+                                    <tr>
+                                        <a href="#" class="agent-link">
+                                            <td class="agent-name">AG-1008</td>
+                                        </a>
+                                        <td>Network Sensor</td>
+                                        <td>System Account</td>
+                                        <td>
+                                            <span class="d-inline-block rounded-circle bg-danger" style="width: 12px; height: 12px;"></span>
+                                        </td>
+                                        <td>5 minutes ago</td>
+                                    </tr>
+                                    
+                                    <!-- Agent 9 -->
+                                    <tr>
+                                        <a href="#" class="agent-link">
+                                            <td class="agent-name">AG-1009</td>
+                                        </a>
+                                        <td>Cloud Collector</td>
+                                        <td>awilliams@example.com</td>
+                                        <td>
+                                            <span class="d-inline-block rounded-circle bg-success" style="width: 12px; height: 12px;" title="Online"></span>
+                                        </td>
+                                        <td>3 minutes ago</td>
+                                    </tr>
+                                    
+                                    <!-- Agent 10 -->
+                                    <tr>
+                                        <a href="#" class="agent-link">
+                                            <td class="agent-name">AG-1010</td>
+                                        </a>
+                                        <td>Database Monitor</td>
+                                        <td>dbadmin@example.com</td>
+                                        <td>
+                                            <span class="d-inline-block rounded-circle bg-danger" style="width: 12px; height: 12px;"></span>
+                                        </td>
+                                        <td>45 minutes ago</td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </div>        
+                </div>    
+            </div>
+        </div>
+    </div>
+</main>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+{% endblock content %}
+
