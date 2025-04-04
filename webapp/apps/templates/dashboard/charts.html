@@ -60,7 +60,7 @@
                     <div class="col-md-4">
                         <div class="card shadow">
                             <div class="card-body">
-                                <h4 class="card-title">Alerts</h4>
+                                <h4 class="card-title">Security Alerts</h4>
                                 <canvas id="alertsChart" height="120"></canvas>
                             </div>
                         </div>
@@ -174,13 +174,14 @@
         new Chart(document.getElementById('alertsChart'), {
             type: 'doughnut',
             data: {
-                labels: ['High', 'Moderate', 'Low'],
+                labels: ['Critical','High', 'Moderate', 'Low'],
                 datasets: [{
-                    data: [12, 45, 112],
+                    data: [12, 24, 37, 48],
                     backgroundColor: [
                         '#CC4049',
-                        '#1991E7',
                         '#D3A832',
+                        '#1991E7',
+                        '#499B49'
                     ]
                 }]
             },
