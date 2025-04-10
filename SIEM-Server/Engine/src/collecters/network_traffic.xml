@@ -1,0 +1,14 @@
+
+<network_traffic>
+    <flow>
+        <src_ip>192.168.1.50</src_ip>
+        <dst_ip>10.0.0.5</dst_ip>
+        <src_port>44532</src_port>
+        <dst_port>443</dst_port>
+        <protocol>TCP</protocol>
+        <total_packets>500</total_packets>
+        <total_bytes>100000</total_bytes>
+        <start_time>2025-02-11T10:00:00Z</start_time>
+        <end_time>2025-02-11T10:00:02Z</end_time>
+    </flow>
+</network_traffic>

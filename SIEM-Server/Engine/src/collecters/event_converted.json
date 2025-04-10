@@ -1,0 +1,82 @@
+{
+  "log_type": "event",
+  "payload": {
+    "Event": {
+      "@xmlns": "http://schemas.microsoft.com/win/2004/08/events/event",
+      "System": {
+        "Provider": {
+          "@Name": "Microsoft-Windows-Security-Auditing",
+          "@Guid": "{54849625-5478-4994-a5ba-3e3b0328c30d}"
+        },
+        "EventID": "5379",
+        "Version": "0",
+        "Level": "0",
+        "Task": "13824",
+        "Opcode": "0",
+        "Keywords": "0x8020000000000000",
+        "TimeCreated": {
+          "@SystemTime": "2025-03-06T19:39:33.8674774Z"
+        },
+        "EventRecordID": "1216443",
+        "Correlation": {
+          "@ActivityID": "{03b6ba99-75b9-0002-4dbe-b603b975db01}"
+        },
+        "Execution": {
+          "@ProcessID": "1012",
+          "@ThreadID": "22660"
+        },
+        "Channel": "Security",
+        "Computer": "abdulmajeed",
+        "Security": null
+      },
+      "EventData": {
+        "Data": [
+          {
+            "@Name": "SubjectUserSid",
+            "#text": "S-1-5-21-2609530437-4289801015-1464640296-1001"
+          },
+          {
+            "@Name": "SubjectUserName",
+            "#text": "akkr2"
+          },
+          {
+            "@Name": "SubjectDomainName",
+            "#text": "ABDULMAJEED"
+          },
+          {
+            "@Name": "SubjectLogonId",
+            "#text": "0x10267f84"
+          },
+          {
+            "@Name": "TargetName",
+            "#text": "MicrosoftAccount:user=akkr2013@gmail.com"
+          },
+          {
+            "@Name": "Type",
+            "#text": "0"
+          },
+          {
+            "@Name": "CountOfCredentialsReturned",
+            "#text": "1"
+          },
+          {
+            "@Name": "ReadOperation",
+            "#text": "%%8100"
+          },
+          {
+            "@Name": "ReturnCode",
+            "#text": "0"
+          },
+          {
+            "@Name": "ProcessCreationTime",
+            "#text": "2025-03-06T19:33:33.0455578Z"
+          },
+          {
+            "@Name": "ClientProcessId",
+            "#text": "14184"
+          }
+        ]
+      }
+    }
+  }
+}
