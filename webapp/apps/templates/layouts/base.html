@@ -34,25 +34,19 @@
             </div>
             <ul class="sidebar-nav">
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">
-                        <i class='bx bxs-user-account'></i> 
-                        <span>Profile</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">
+                    <a href="{% url 'homepage' %}" class="sidebar-link">
                         <i class='bx bxs-dashboard' ></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">
+                    <a href="{% url 'charts' %}" class="sidebar-link">
                         <i class='bx bxs-bar-chart-alt-2' ></i>  
                         <span>Charts</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">
+                    <a href="{% url 'agents' %}" class="sidebar-link">
                         <i class='bx bx-laptop'></i>
                         <span>Agents</span>
                     </a>
@@ -64,15 +58,9 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">
+                    <a href="{% url 'alerts' %}" class="sidebar-link">
                         <i class="bx bxs-bell-ring"></i>
-                        <span>Alerts</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">
-                        <i class="bx bxs-cog"></i>
-                        <span>Settings</span>
+                        <span>Security Alerts</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
@@ -80,7 +68,7 @@
                 </li>
             </ul>
             <div class="sidebar-footer">
-                    <a href="#" class="sidebar-link">
+                    <a href="{% url 'login' %}" class="sidebar-link">
                         <i class='bx bx-log-out'></i>
                         <span>Logout</span>
                     </a>

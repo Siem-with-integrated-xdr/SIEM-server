@@ -2,6 +2,8 @@ from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
+from django.http import JsonResponse
+
 
 
 
@@ -64,3 +66,6 @@ def moderate_view(request):
 
 def low_view(request):
     return render(request, 'dashboard/low_alerts.html')
+
+def agent_view(request):
+    return render(request, 'dashboard/agent.html')

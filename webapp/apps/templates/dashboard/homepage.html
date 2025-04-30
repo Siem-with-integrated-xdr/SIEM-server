@@ -2,13 +2,12 @@
 {% block content %}
 {% load static %}
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Gradproject{% endblock %}</title>
+    <title>{% block title %}Homepage{% endblock %}</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -16,255 +15,503 @@
     <!-- boxicons -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@1.1.0"></script>
+
     <!-- Custom CSS -->
-     {% block css %}
+    {% block css %}
     <link rel="stylesheet" href="{% static 'css/styles1.css' %}">
-    {% endblock %}</head>
+    {% endblock %}
+</head>
 
 <body>
     <main class="content px-3 py-4">
-        <div class="container mt10">
+        <div class="container mt-3">  <!-- Fixed mt10 to mt-3 -->
             <div class="mb-3">
                 <h2 class="fw-bold fs-2 mb-4">Admin Dashboard</h2>
-                <h3 class="fw-bold fs-4 mb-3">Security Alerts</h3>
+                
+                <!-- System Health Row -->
                 <div class="row mb-4">
-                    <div class="col-12 col-md-3">
-                        <a href="#" >
-                            <div class="card shadow card-alert bg-danger">
-                                <div class="card-body py-4">
-                                    <h3 class="fw-bold mb-2 text-white">
-                                        Critical
-                                    </h3>
-                                    <p class="fw-bold mb-2 text-white">
-                                        12
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-12 col-md-3">
-                        <a href="#" >
-                            <div class="card shadow card-alert bg-warning">
-                                <div class="card-body py-4">
-                                    <h3 class="mb-2 fw-bold text-dark">
-                                        High
-                                    </h3>
-                                    <p class="fw-bold mb-2 text-dark">
-                                        24
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-12 col-md-3">
-                        <a href="#" >
-                            <div class="card shadow card-alert bg-info">
-                                <div class="card-body py-4">
-                                    <h3 class="mb-2 fw-bold text-white">
-                                        Moderate
-                                    </h3>
-                                    <p class="fw-bold mb-2 text-white">
-                                        37
-                                    </p>
-                                </div>
-                            </div>
-                        </a>    
-                    </div>
-                    <div class="col-12 col-md-3">
-                        <a href="#" >
-                            <div class="card shadow card-alert bg-success">
-                                <div class="card-body py-4">
-                                    <h3 class="mb-2 fw-bold text-white">
-                                        Low
-                                    </h3>
-                                    <p class="fw-bold mb-2 text-white">
-                                        48
-                                    </p>
-                                </div>
-                            </div>
-                        </a>    
-                    </div>
-                </div>
-
-                <div class="row mt-4">
-                    <h3 class="fw-bold fs-4 mb-3">Reports</h3>
-                    <div class="col-12 col-md-5">
-                        <div class="card shadow">
-                            <div class="card-body py-7">
-                                <h5 class="card-title">Reports Overview</h5>
-                                <canvas id="bar-chart-grouped" height="120"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-5">
-                        <div class="card shadow">
-                            <div class="card-body py-7">
-                                <h5 class="card-title">Internet usage</h5>
-                                <canvas id="memberChart" height="120"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                
-                
-                <div class="row">
                     <div class="col-12">
-                        <h3 class="fw-bold fs-4 my-3">Users</h3>
-                        <div class="table-responsive">
-                            <div class="card shadow">
-                                <div class="card-body py-7">
-                                    <table class="table table-striped table-hover">
-                                        <thead class="table-header">
-                                            <tr class="highlight">
-                                                <th scope="col">Agent ID</th>
-                                                <th scope="col">Model</th>
-                                                <th scope="col">User</th>
-                                                <th scope="col">Status</th>
-                                                <th scope="col">Last Check-in</th>
+                        <h3 class="fw-bold fs-4 mb-3">Security Alerts</h3>
+                        <div class="row mb-4">
+                            <div class="col-12 col-md-3">
+                                <a href="{% url 'critical' %}" >
+                                    <div class="card shadow card-alert bg-danger">
+                                        <div class="card-body py-4">
+                                            <h3 class="fw-bold mb-2 text-white">
+                                                Critical
+                                            </h3>
+                                            <p class="fw-bold mb-2 text-white">
+                                                12
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <a href="{% url 'high' %}" >
+                                    <div class="card shadow card-alert bg-warning">
+                                        <div class="card-body py-4">
+                                            <h3 class="mb-2 fw-bold text-dark">
+                                                High
+                                            </h3>
+                                            <p class="fw-bold mb-2 text-dark">
+                                                24
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <a href="{% url 'moderate' %}" >
+                                    <div class="card shadow card-alert bg-info">
+                                        <div class="card-body py-4">
+                                            <h3 class="mb-2 fw-bold text-white">
+                                                Moderate
+                                            </h3>
+                                            <p class="fw-bold mb-2 text-white">
+                                                37
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>    
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <a href="{% url 'low' %}" >
+                                    <div class="card shadow card-alert bg-success">
+                                        <div class="card-body py-4">
+                                            <h3 class="mb-2 fw-bold text-white">
+                                                Low
+                                            </h3>
+                                            <p class="fw-bold mb-2 text-white">
+                                                48
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>    
+                            </div>
+                        </div>
+    
+                <!-- System Health Section -->
+                <h3 class="fw-bold fs-4 mb-3">System Health</h3>
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- CPU Usage -->
+                            <div class="col-md-3 mb-4 mb-md-0">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="bx bx-chip fs-4 text-warning me-2"></i>
+                                    <h5 class="card-title mb-0">CPU Usage</h5>
+                                </div>
+                                <div class="gauge-container mx-auto" style="height: 120px; width: 100%;">
+                                    <canvas id="cpuGauge"></canvas>
+                                </div>
+                                <div class="text-center mt-3">
+                                    <span class="h4 text-warning">45%</span>
+                                    <small class="d-block text-muted">4 cores @ 2.8GHz</small>
+                                    <small class="text-danger"><i class="bx bx-up-arrow-alt"></i> 5% from yesterday</small>
+                                </div>
+                            </div>
+                            
+                            <!-- Memory Usage -->
+                            <div class="col-md-3 mb-4 mb-md-0">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="bx bx-memory-card fs-4 text-danger me-2"></i>
+                                    <h5 class="card-title mb-0">Memory Usage</h5>
+                                </div>
+                                <div class="gauge-container mx-auto" style="height: 120px; width: 100%;">
+                                    <canvas id="memoryGauge"></canvas>
+                                </div>
+                                <div class="text-center mt-3">
+                                    <span class="h4 text-danger">78%</span>
+                                    <small class="d-block text-muted">12.5GB of 16GB</small>
+                                    <small class="text-success"><i class="bx bx-down-arrow-alt"></i> 3% from yesterday</small>
+                                </div>
+                            </div>
+                            
+                            <!-- Disk Usage -->
+                            <div class="col-md-3 mb-4 mb-md-0">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="bx bx-hdd fs-4 text-success me-2"></i>
+                                    <h5 class="card-title mb-0">Disk Usage</h5>
+                                </div>
+                                <div class="gauge-container mx-auto" style="height: 120px; width: 100%;">
+                                    <canvas id="diskGauge"></canvas>
+                                </div>
+                                <div class="text-center mt-3">
+                                    <span class="h4 text-success">32%</span>
+                                    <small class="d-block text-muted">160GB of 500GB</small>
+                                    <small class="text-warning"><i class="bx bx-up-arrow-alt"></i> 2% from yesterday</small>
+                                </div>
+                            </div>
+                            
+                            <!-- Uptime -->
+                            <div class="col-md-3">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="bx bx-time-five fs-4 text-primary me-2"></i>
+                                    <h5 class="card-title mb-0">System Uptime</h5>
+                                </div>
+                                <div class="d-flex flex-column align-items-center justify-content-center" style="height: 150px;">
+                                    <span class="display-5 text-primary center" >18d</span>
+                                    <span class="h4 text-primary">7h</span>
+                                </div>
+                                <div class="text-center mt-2">
+                                    <small class="d-block text-muted">Since last reboot</small>
+                                    <small class="text-success"><i class="bx bx-check-circle"></i> Stable</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Top Agents and Heatmap Row -->
+                <div class="row mb-4">
+                    <!-- Top Agents -->
+                    <!-- Top Agents and Event Heatmap Row -->
+                <div class="row mb-4">
+                    <!-- Top Agents by Alert Volume -->
+                    <div class="col-12 col-md-6">
+                        <div class="card shadow h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Top Agents by Alert Volume</h5>
+                                <div class="scoreboard">
+                                    <div class="scoreboard-card mb-3 p-3 rounded">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <span class="badge bg-primary me-2">1</span>
+                                                <span class="agent-score">AG-1001</span>
+                                                <small class="text-muted ms-2">Windows Endpoint</small>
+                                            </div>
+                                            <span class="badge bg-danger">42 alerts</span>
+                                        </div>
+                                        <div class="progress progress-thin mt-2">
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 100%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="scoreboard-card mb-3 p-3 rounded">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <span class="badge bg-secondary me-2">2</span>
+                                                <span class="agent-score">AG-1003</span>
+                                                <small class="text-muted ms-2">Network Sensor</small>
+                                            </div>
+                                            <span class="badge bg-warning text-dark">28 alerts</span>
+                                        </div>
+                                        <div class="progress progress-thin mt-2">
+                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 67%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="scoreboard-card mb-3 p-3 rounded">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <span class="badge bg-dark me-2">3</span>
+                                                <span class="agent-score">AG-1005</span>
+                                                <small class="text-muted ms-2">Database Monitor</small>
+                                            </div>
+                                            <span class="badge bg-info">19 alerts</span>
+                                        </div>
+                                        <div class="progress progress-thin mt-2">
+                                            <div class="progress-bar bg-info" role="progressbar" style="width: 45%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Heatmap -->
+                    <div class="col-lg-6">
+                        <div class="card shadow h-100">
+                            <div class="card-body">
+                                <h5 class="card-title mb-4">Network Protocol Distribution</h5>
+                                <div class="chart-container" style="height: 300px;">
+                                    <canvas id="protocolChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Users Table -->
+                <!-- Users Table Section -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3 class="fw-bold fs-4 mb-0">Agent Management</h3>
+                            <button class="btn btn-primary btn-sm">
+                                <i class="bx bx-plus"></i> Add Agent
+                            </button>
+                        </div>
+        
+                        <div class="card shadow-sm">
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover align-middle mb-0">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th class="ps-4">Agent ID</th>
+                                                <th>Model</th>
+                                                <th>User</th>
+                                                <th class="text-center">Status</th>
+                                                <th>Last Check-in</th>
+                                                <th class="text-end pe-4">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <!-- Agent 1 -->
                                             <tr>
-                                                <a href="#" class="agent-link">
-                                                    <td class="agent-name">AG-1001</td>
-                                                </a>
+                                                <td class="ps-4 fw-semibold">
+                                                    <a href="/agents/AG-1001" class="text-decoration-none">AG-1001</a>
+                                                </td>
                                                 <td>Windows Endpoint</td>
                                                 <td>jsmith@example.com</td>
-                                                <td>
-                                                    <span class="d-inline-block rounded-circle bg-success" style="width: 12px; height: 12px;" title="Online"></span>
+                                                <td class="text-center">
+                                                    <span class="badge bg-success bg-opacity-10 text-success">
+                                                        <i class="bx bx-check-circle"></i> Online
+                                                    </span>
                                                 </td>
-                                                <td>2 minutes ago</td>
+                                                <td>
+                                                    <span class="text-muted">2 minutes ago</span>
+                                                </td>
+                                                <td class="text-end pe-4">
+                                                    <div class="btn-group btn-group-sm">
+                                                        <button class="btn btn-outline-secondary">
+                                                            <i class="bx bx-cog"></i>
+                                                        </button>
+                                                        <button class="btn btn-outline-danger">
+                                                            <i class="bx bx-power-off"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
                                             </tr>
                                             
                                             <!-- Agent 2 -->
                                             <tr>
-                                                <a href="#" class="agent-link">
-                                                    <td class="agent-name">AG-1002</td>
-                                                </a>
+                                                <td class="ps-4 fw-semibold">
+                                                    <a href="/agents/AG-1002" class="text-decoration-none">AG-1002</a>
+                                                </td>
                                                 <td>Linux Server</td>
                                                 <td>mjohnson@example.com</td>
-                                                <td>
-                                                    <span class="status-indicator status-off"></span>
-                                                    <span class="d-inline-block rounded-circle bg-danger" style="width: 12px; height: 12px;"></span>
+                                                <td class="text-center">
+                                                    <span class="badge bg-danger bg-opacity-10 text-danger">
+                                                        <i class="bx bx-error-circle"></i> Offline
+                                                    </span>
                                                 </td>
-                                                <td>1 hour ago</td>
+                                                <td>
+                                                    <span class="text-muted">1 hour ago</span>
+                                                </td>
+                                                <td class="text-end pe-4">
+                                                    <div class="btn-group btn-group-sm">
+                                                        <button class="btn btn-outline-secondary">
+                                                            <i class="bx bx-cog"></i>
+                                                        </button>
+                                                        <button class="btn btn-outline-danger">
+                                                            <i class="bx bx-power-off"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
                                             </tr>
                                             
                                             <!-- Agent 3 -->
                                             <tr>
-                                                <a href="#" class="agent-link">
-                                                    <td class="agent-name">AG-1003</td>
-                                                </a>
-                                                <td>Network Sensor</td>
-                                                <td>System Account</td>
-                                                <td>
-                                                    <span class="d-inline-block rounded-circle bg-danger" style="width: 12px; height: 12px;"></span>
+                                                <td class="ps-4 fw-semibold">
+                                                    <a href="/agents/AG-1003" class="text-decoration-none">AG-1003</a>
                                                 </td>
-                                                <td>5 minutes ago</td>
+                                                <td>Network Sensor</td>
+                                                <td>system@domain.com</td>
+                                                <td class="text-center">
+                                                    <span class="badge bg-success bg-opacity-10 text-success">
+                                                        <i class="bx bx-check-circle"></i> Online
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="text-muted">5 minutes ago</span>
+                                                </td>
+                                                <td class="text-end pe-4">
+                                                    <div class="btn-group btn-group-sm">
+                                                        <button class="btn btn-outline-secondary">
+                                                            <i class="bx bx-cog"></i>
+                                                        </button>
+                                                        <button class="btn btn-outline-danger">
+                                                            <i class="bx bx-power-off"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
                                             </tr>
                                             
                                             <!-- Agent 4 -->
                                             <tr>
-                                                <a href="#" class="agent-link">
-                                                    <td class="agent-name">AG-1004</td>
-                                                </a>
+                                                <td class="ps-4 fw-semibold">
+                                                    <a href="/agents/AG-1004" class="text-decoration-none">AG-1004</a>
+                                                </td>
                                                 <td>Cloud Collector</td>
                                                 <td>awilliams@example.com</td>
-                                                <td>
-                                                    <span class="d-inline-block rounded-circle bg-success" style="width: 12px; height: 12px;" title="Online"></span>
+                                                <td class="text-center">
+                                                    <span class="badge bg-warning bg-opacity-10 text-warning">
+                                                        <i class="bx bx-time"></i> Unstable
+                                                    </span>
                                                 </td>
-                                                <td>3 minutes ago</td>
-                                            </tr>
-                                            
-                                            <!-- Agent 5 -->
-                                            <tr>
-                                                <a href="#" class="agent-link">
-                                                    <td class="agent-name">AG-1005</td>
-                                                </a>
-                                                <td>Database Monitor</td>
-                                                <td>dbadmin@example.com</td>
                                                 <td>
-                                                    <span class="d-inline-block rounded-circle bg-danger" style="width: 12px; height: 12px;"></span>
+                                                    <span class="text-muted">15 minutes ago</span>
                                                 </td>
-                                                <td>45 minutes ago</td>
+                                                <td class="text-end pe-4">
+                                                    <div class="btn-group btn-group-sm">
+                                                        <button class="btn btn-outline-secondary">
+                                                            <i class="bx bx-cog"></i>
+                                                        </button>
+                                                        <button class="btn btn-outline-danger">
+                                                            <i class="bx bx-power-off"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
                                             </tr>
-                                    </tbody>
-                                </table>
-                            </div>        
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+            
+                            <!-- Table Footer with Pagination -->
+                            <div class="card-footer bg-white border-top">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="text-muted small">
+                                        Showing 1 to 4 of 10 entries
+                                    </div>
+                                    <nav>
+                                        <ul class="pagination pagination-sm mb-0">
+                                            <li class="page-item disabled">
+                                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                            </li>
+                                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="#">Next</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
                         </div>
-                    </div>    
+                    </div>
                 </div>
             </div>
         </div>
     </main>
+
+
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const hamburger = document.querySelector(".toggle-btn");
-            const toggler = document.querySelector("#icon");
-            const sidebar = document.querySelector("#sidebar");
-
-            if (hamburger && toggler && sidebar) {
-                hamburger.addEventListener("click", () => {
-                    sidebar.classList.toggle("expand");
-                    toggler.classList.toggle("bxs-chevrons-right");
-                    toggler.classList.toggle("bxs-chevrons-left");
-                        });
+            // Initialize gauge charts
+            function createGauge(chartId, value, color) {
+                const ctx = document.getElementById(chartId);
+                if (!ctx) {
+                    console.error(`Canvas element with ID ${chartId} not found`);
+                    return null;
+                }
+                
+                return new Chart(ctx.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        datasets: [{
+                            data: [value, 100 - value],
+                            backgroundColor: [color, '#f8f9fa'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        circumference: 180,
+                        rotation: -90,
+                        cutout: '80%',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: false }
+                        }
                     }
                 });
-                document.addEventListener('DOMContentLoaded', function() {
-            new Chart(document.getElementById("bar-chart-grouped"), {
-                type: 'bar',
-                data: {
-                    labels: ["Jan", "feb", "Mar", "Apr", "May", "Jun"],
+            }
+        
+            // Create gauge charts
+            createGauge('cpuGauge', 45, '#ffc107');
+            createGauge('memoryGauge', 78, '#dc3545');
+            createGauge('diskGauge', 32, '#28a745');
+        
+            // Protocols 
+            function createProtocolChart() {
+                const ctx = document.getElementById('protocolChart');
+                if (!ctx) return;
+
+                // Sample data - replace with your actual data
+                const protocolData = {
+                    labels: ['HTTP', 'HTTPS', 'DNS', 'SSH', 'FTP', 'SMTP', 'Other'],
                     datasets: [
                         {
-                            label: "Example 1",
-                            backgroundColor: "#3e95cd",
-                            data: [533,221,783,1278,1031,712]
-                        }, {
-                            label: "Example 2",
-                            backgroundColor: "#8e5ea2",
-                            data: [408,547,675,734, 322, 1422]
+                            label: 'Inbound',
+                            data: [120, 180, 80, 45, 30, 25, 50],
+                            backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Outbound',
+                            data: [90, 150, 60, 30, 20, 15, 40],
+                            backgroundColor: 'rgba(255, 99, 132, 0.8)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
                         }
                     ]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: ''
+                };
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: protocolData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                stacked: true,
+                                grid: {
+                                    display: false
+                                }
+                            },
+                            y: {
+                                stacked: true,
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Number of Connections'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    afterBody: function(context) {
+                                        const total = context[0].dataset.data.reduce((a, b) => a + b, 0);
+                                        const percentage = Math.round((context[0].raw / total) * 100);
+                                        return `Percentage: ${percentage}% of ${context[0].dataset.label}`;
+                                    }
+                                }
+                            }
                         }
                     }
-                }
-            });
-            new Chart(document.getElementById('memberChart'), {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                datasets: [{
-                    label: ' ',
-                    data: [47, 59, 60, 53, 56, 62],
-                    borderColor: '#ff0000',
-                    fill: false
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { position: 'top' }
-                }
+                });
             }
+            createProtocolChart();
         });
-        });
-         
-    </script>
+        </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="{% static 'js/script.js' %}"></script>
     <!-- Chart.js Script -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chart.js Matrix Controller for Heatmap -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@1.1.0"></script>
 </body>
 </html>
 {% endblock content %}

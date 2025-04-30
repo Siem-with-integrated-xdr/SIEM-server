@@ -335,3 +335,76 @@ a.card-body:hover{
     font-size: 0.75rem;
     padding: 0.35em 0.65em;
 }
+
+
+/* for health card */
+.health-card {
+    transition: all 0.3s ease;
+    height: 100%;
+}
+.health-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+.gauge-container {
+    height: 120px;
+    position: relative;
+    margin-bottom: 10px;
+}
+.health-icon {
+    font-size: 2.5rem;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+.health-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+.health-label {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+.uptime-display {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #0d6efd;
+}
+.scoreboard-card {
+    transition: all 0.3s ease;
+}
+.scoreboard-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+.gauge-container {
+    height: 120px;
+    position: relative;
+}
+.heatmap-container {
+    height: 250px;
+}
+.agent-score {
+    font-weight: 600;
+}
+.progress-thin {
+    height: 8px;
+}
+
+/* ??? */
+
+.gauge-container {
+    position: relative;
+    height: 120px;
+    width: 100%;
+}
+
+.gauge-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+#heatmap {
+    display: block;  /* Required for Chart.js */
+    width: 100% !important;
+    height: 100% !important;
+  }
