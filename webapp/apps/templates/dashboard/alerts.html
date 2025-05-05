@@ -3,7 +3,6 @@
 
 {% block content %}
 
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,6 +12,9 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
     <!-- boxicons -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 
@@ -20,6 +22,7 @@
     {% block css %}
     <link rel="stylesheet" href="{% static 'css/styles1.css' %}">
     {% endblock %}
+
 </head>
 
 <body>
@@ -28,184 +31,279 @@
             <div class="mb-3">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h1 class="h2 mb-0"><i class="bi bi-shield-exclamation"></i> Security Alerts</h1>
-                    <div>
-                        <button class="btn btn-outline-secondary me-2">
-                            <i class="bi bi-funnel"></i> Filter
-                        </button>
-                        <button class="btn btn-primary">
-                            <i class="bi bi-plus-circle"></i> New Alert
-                        </button>
-                    </div>
                 </div>
-        
+
                 <!-- Alert Summary Cards -->
-                <div class="row mb-4">
+                <div class="row mb-4" id="summaryCards">
                     <div class="col-12 col-md-3">
-                        <a href="{% url 'critical' %}" >
+                        <a href="{% url 'critical' %}">
                             <div class="card shadow card-alert bg-danger">
                                 <div class="card-body py-4">
-                                    <h3 class="fw-bold mb-2 text-white">
-                                        Critical
-                                    </h3>
-                                    <p class="fw-bold mb-2 text-white">
-                                        12
-                                    </p>
+                                    <h3 class="fw-bold mb-2 text-white">Critical</h3>
+                                    <p class="fw-bold mb-2 text-white" id="criticalCount">Loading...</p>
                                 </div>
                             </div>
                         </a>
                     </div>
                     <div class="col-12 col-md-3">
-                        <a href="{% url 'high' %}" >
+                        <a href="{% url 'high' %}">
                             <div class="card shadow card-alert bg-warning">
                                 <div class="card-body py-4">
-                                    <h3 class="mb-2 fw-bold text-dark">
-                                        High
-                                    </h3>
-                                    <p class="fw-bold mb-2 text-dark">
-                                        24
-                                    </p>
+                                    <h3 class="mb-2 fw-bold text-dark">High</h3>
+                                    <p class="fw-bold mb-2 text-dark" id="highCount">Loading...</p>
                                 </div>
                             </div>
                         </a>
                     </div>
                     <div class="col-12 col-md-3">
-                        <a href="{% url 'moderate' %}" >
+                        <a href="{% url 'moderate' %}">
                             <div class="card shadow card-alert bg-info">
                                 <div class="card-body py-4">
-                                    <h3 class="mb-2 fw-bold text-white">
-                                        Moderate
-                                    </h3>
-                                    <p class="fw-bold mb-2 text-white">
-                                        37
-                                    </p>
+                                    <h3 class="mb-2 fw-bold text-white">Moderate</h3>
+                                    <p class="fw-bold mb-2 text-white" id="moderateCount">Loading...</p>
                                 </div>
                             </div>
                         </a>    
                     </div>
                     <div class="col-12 col-md-3">
-                        <a href="{% url 'low' %}" >
+                        <a href="{% url 'low' %}">
                             <div class="card shadow card-alert bg-success">
                                 <div class="card-body py-4">
-                                    <h3 class="mb-2 fw-bold text-white">
-                                        Low
-                                    </h3>
-                                    <p class="fw-bold mb-2 text-white">
-                                        48
-                                    </p>
+                                    <h3 class="mb-2 fw-bold text-white">Low</h3>
+                                    <p class="fw-bold mb-2 text-white" id="lowCount">Loading...</p>
                                 </div>
                             </div>
                         </a>    
                     </div>
                 </div>
-        
-                <!-- Alert List -->
-                <div class="row g-4">
-                    <!-- Critical Alert -->
-                    <div class="col-12">
-                        <a href="#" class="text-decoration-none">
-                            <div class="card alert-card shadow-sm">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div>
-                                            <span class="badge bg-danger severity-badge mb-2">CRITICAL</span>
-                                            <h5 class="card-title mb-1">Database Breach Attempt</h5>
-                                            <p class="text-muted small mb-2"><i class="bi bi-clock"></i> 5 min ago | <i class="bi bi-database"></i> DB-SERVER-01</p>
-                                        </div>
-                                        <i class="bi bi-chevron-right text-muted"></i>
-                                    </div>
-                                    <p class="card-text">Multiple SQL injection attempts detected on customer database server</p>
-                                    <div class="d-flex align-items-center">
-                                        <span class="badge bg-dark me-2">SQLi</span>
-                                        <span class="badge bg-dark">Brute Force</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-        
-                    <!-- High Alert -->
-                    <div class="col-12">
-                        <a href="#" class="text-decoration-none">
-                            <div class="card alert-card shadow-sm">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div>
-                                            <span class="badge bg-warning text-dark severity-badge mb-2">HIGH</span>
-                                            <h5 class="card-title mb-1">Unauthorized Privilege Escalation</h5>
-                                            <p class="text-muted small mb-2"><i class="bi bi-clock"></i> 1 hour ago | <i class="bi bi-person"></i> User: jsmith</p>
-                                        </div>
-                                        <i class="bi bi-chevron-right text-muted"></i>
-                                    </div>
-                                    <p class="card-text">User attempted to gain admin privileges through sudo command abuse</p>
-                                    <div class="d-flex align-items-center">
-                                        <span class="badge bg-dark me-2">Privilege Escalation</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-        
-                    <!-- Moderate Alert -->
-                    <div class="col-12">
-                        <a href="#" class="text-decoration-none">
-                            <div class="card alert-card shadow-sm">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div>
-                                            <span class="badge bg-info severity-badge mb-2">MODERATE</span>
-                                            <h5 class="card-title mb-1">Suspicious Process</h5>
-                                            <p class="text-muted small mb-2"><i class="bi bi-clock"></i> 8 hours ago | <i class="bi bi-pc-display"></i> WS-209</p>
-                                        </div>
-                                        <i class="bi bi-chevron-right text-muted"></i>
-                                    </div>
-                                    <p class="card-text">Unknown process "svchostx.exe" running with network connections</p>
-                                    <div class="d-flex align-items-center">
-                                        <span class="badge bg-dark me-2">Process</span>
-                                        <span class="badge bg-dark">Network</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-        
-                    <!-- Low Alert -->
-                    <div class="col-12">
-                        <a href="#" class="text-decoration-none">
-                            <div class="card alert-card shadow-sm">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div>
-                                            <span class="badge bg-success severity-badge mb-2">LOW</span>
-                                            <h5 class="card-title mb-1">Password Policy Warning</h5>
-                                            <p class="text-muted small mb-2"><i class="bi bi-clock"></i> 1 day ago | <i class="bi bi-person"></i> User: rjohnson</p>
-                                        </div>
-                                        <i class="bi bi-chevron-right text-muted"></i>
-                                    </div>
-                                    <p class="card-text">User password will expire in 3 days (policy requires change every 90 days)</p>
-                                    <div class="d-flex align-items-center">
-                                        <span class="badge bg-dark me-2">Password</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
+
+
+                <!-- Alerts Container -->
+                <div class="row g-4" id="alertsContainer">
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Loading security alerts...</p>
                     </div>
                 </div>
-        
+
                 <!-- Pagination -->
                 <nav class="mt-4">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">Previous</a>
-                        </li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
-                        </li>
-                    </ul>
+                    <ul class="pagination justify-content-center" id="pagination"></ul>
                 </nav>
             </div>
+        </div>
     </main>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script>
+        const API_URL = 'https://3ecf-46-152-4-125.ngrok-free.app/alerts/';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAPIStatus().then(isAvailable => {
+                if (!isAvailable) {
+                    showError("API server is not responding. Please try again later.");
+                    return;
+                }
+                loadAlertData(1);
+            }).catch(error => {
+                console.error('API check failed:', error);
+                showError("Failed to connect to the server.");
+            });
+        });
+
+        async function checkAPIStatus() {
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'GET', cache: 'no-cache'
+                });
+                return response.ok;
+            } catch (error) {
+                console.error('API check error:', error);
+                return false;
+            }
+        }
+
+        async function loadAlertData(page = 1) {
+            try {
+                const response = await fetch(`${API_URL}?page=${page}`, {
+                method: 'GET',
+                headers: {
+                    'ngrok-skip-browser-warning': '1',  // bypass free-ngrok splash
+                    'Accept': 'application/json'       // ensure JSON response
+                },
+                cache: 'no-cache'
+                });
+
+                if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                // Update summary cards
+                updateSummaryCards(data.summary ||{
+                critical: 0,
+                high:     0,
+                moderate:   0,
+                low:      0
+                });
+
+                // Render the alerts list
+                renderAlerts(data.alerts || []);
+
+                // Update pagination controls
+                updatePagination(data.pagination || {
+                current_page: page,
+                total_pages:  1,
+                total_alerts: (data.alerts || []).length
+                });
+
+            } catch (error) {
+                console.error('Error loading alert data:', error);
+                showError("Failed to load alerts. Please try again later.");
+            }
+        }
+
+        function updateSummaryCards(summary) {
+            document.getElementById('criticalCount').textContent = summary.critical;
+            document.getElementById('highCount').textContent = summary.high;
+            document.getElementById('moderateCount').textContent = summary.medium;
+            document.getElementById('lowCount').textContent = summary.low;
+        }
+
+        function renderAlerts(alerts) {
+            const alertsContainer = document.getElementById('alertsContainer');
+            if (alerts.length === 0) {
+                alertsContainer.innerHTML = `
+                    <div class="col-12 text-center py-4 text-muted">
+                        <i class="bi bi-info-circle"></i> No alerts found
+                    </div>`;
+                return;
+            }
+            alertsContainer.innerHTML = alerts.map(alert => `
+                <div class="col-12">
+                    <div class="card alert-card shadow-sm mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <span class="badge ${getSeverityClass(alert.severity)} severity-badge mb-2">
+                                        ${alert.severity.toUpperCase()}
+                                    </span>
+                                    <h5 class="card-title mb-1">${alert.title || 'No title'}</h5>
+                                    <p class="text-muted small mb-2">
+                                        <i class="bi bi-clock"></i> ${formatTimeAgo(alert.timestamp)} | 
+                                        <i class="bi ${getIconClass(alert.sourceIcon)}"></i> ${alert.source || 'Unknown source'}
+                                    </p>
+                                </div>
+                                <i class="bi bi-chevron-right text-muted"></i>
+                            </div>
+                            <p class="card-text">${alert.description || 'No description provided'}</p>
+                            <div class="d-flex align-items-center">
+                                ${(alert.tags || []).map(tag => `<span class="badge bg-dark me-2">${tag}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updatePagination(pagination) {
+            const paginationContainer = document.getElementById('pagination');
+            if (!pagination || pagination.total_pages <= 1) {
+                paginationContainer.innerHTML = '';
+                return;
+            }
+
+            const current = pagination.current_page;
+            const total = pagination.total_pages;
+            let paginationHTML = '';
+
+            // Previous button
+            paginationHTML += `
+                <li class="page-item ${current === 1 ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="loadAlertData(${current - 1}); return false;">Previous</a>
+                </li>`;
+
+            // First page
+            paginationHTML += `
+                <li class="page-item ${current === 1 ? 'active' : ''}">
+                    <a class="page-link" href="#" onclick="loadAlertData(1); return false;">1</a>
+                </li>`;
+
+            // Left ellipsis
+            if (current > 4) {
+                paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+            }
+
+            // Pages around current (2 before and 2 after)
+            const start = Math.max(2, current - 2);
+            const end = Math.min(total - 1, current + 2);
+
+            for (let i = start; i <= end; i++) {
+                paginationHTML += `
+                    <li class="page-item ${i === current ? 'active' : ''}">
+                        <a class="page-link" href="#" onclick="loadAlertData(${i}); return false;">${i}</a>
+                    </li>`;
+            }
+
+            // Right ellipsis
+            if (current < total - 3) {
+                paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+            }
+
+            // Last page (only if more than one page)
+            if (total > 1) {
+                paginationHTML += `
+                    <li class="page-item ${current === total ? 'active' : ''}">
+                        <a class="page-link" href="#" onclick="loadAlertData(${total}); return false;">${total}</a>
+                    </li>`;
+            }
+
+            // Next button
+            paginationHTML += `
+                <li class="page-item ${current === total ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="loadAlertData(${current + 1}); return false;">Next</a>
+                </li>`;
+
+            paginationContainer.innerHTML = paginationHTML;
+        }
+
+        function getSeverityClass(severity) {
+            const severityMap = {critical: 'bg-danger', high: 'bg-warning text-dark', moderate: 'bg-info', low: 'bg-success'};
+            return severityMap[severity.toLowerCase()] || 'bg-secondary';
+        }
+
+        function getIconClass(sourceIcon) {
+            if (!sourceIcon) return 'bi-question-circle';
+            return sourceIcon.startsWith('bi-') ? sourceIcon : `bi-${sourceIcon}`;
+        }
+
+        function formatTimeAgo(timestamp) {
+            if (!timestamp) return 'Unknown time';
+            const now = new Date();
+            const alertTime = new Date(timestamp);
+            const diffSeconds = Math.floor((now - alertTime) / 1000);
+            if (diffSeconds < 60) return `${diffSeconds} seconds ago`;
+            if (diffSeconds < 3600) return `${Math.floor(diffSeconds / 60)} minutes ago`;
+            if (diffSeconds < 86400) return `${Math.floor(diffSeconds / 3600)} hours ago`;
+            return `${Math.floor(diffSeconds / 86400)} days ago`;
+        }
+
+        function showError(message) {
+            const alertsContainer = document.getElementById('alertsContainer');
+            alertsContainer.innerHTML = `
+                <div class="col-12">
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-triangle-fill"></i> ${message}
+                        <button class="btn btn-sm btn-outline-danger ms-2" onclick="window.location.reload()">Retry</button>
+                    </div>
+                </div>`;
+        }
+    </script>
 </body>
+</html>
 {% endblock content %}

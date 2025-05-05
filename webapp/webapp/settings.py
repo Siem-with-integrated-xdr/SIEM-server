@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_bootstrap5',
     'apps.dashboard',
-    'debug_toolbar'
+    'debug_toolbar',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -52,7 +54,17 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
 ]
+# ?????
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8024",]
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+  "ngrok-skip-browser-warning",
+]
+
 
 ROOT_URLCONF = 'webapp.urls'
 

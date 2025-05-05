@@ -13,6 +13,6 @@ urlpatterns = [
     path('high/', views.high_view, name='high'),
     path('moderate/', views.moderate_view, name='moderate'),
     path('low/', views.low_view, name='low'),
-    path('agent/', views.agent_view, name='agent'),
+    path('agent/<str:agent_id>', views.agent_detail, name='agent'),
 ]
 
