@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 13px; }
+        h2 { background-color: #eee; padding: 8px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
+        img.chart { max-width: 100%; height: auto; margin-bottom: 20px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h2>Agent Report - {{ agent.agent.agent_id }}</h2>
+    <table>
+        <tr><th>Hostname</th><td>{{ agent.agent.hostname }}</td></tr>
+        <tr><th>IP</th><td>{{ agent.agent.ip }}</td></tr>
+        <tr><th>OS</th><td>{{ agent.agent.os }}</td></tr>
+        <tr><th>Version</th><td>{{ agent.agent.version }}</td></tr>
+        <tr><th>Status</th><td>{{ agent.agent.status }}</td></tr>
+        <tr><th>Last Check-in</th><td>{{ agent.agent.lastCheckin }}</td></tr>
+        <tr><th>User</th><td>{{ agent.agent.user }}</td></tr>
+    </table>
+
+    <h2>Resource Usage</h2>
+    <ul>
+        <li>CPU: {{ agent.resources.cpu.usage }}%</li>
+        <li>Memory: {{ agent.resources.memory.usage }}%</li>
+        <li>Disk: {{ agent.resources.disk.usage }}%</li>
+    </ul>
+
+    <h2>Recent Activities</h2>
+    <table>
+        <tr><th>Severity</th><th>Title</th><th>Description</th><th>Timestamp</th></tr>
+        {% for act in agent.recentActivity %}
+        <tr>
+            <td>{{ act.severity }}</td>
+            <td>{{ act.title }}</td>
+            <td>{{ act.description }}</td>
+            <td>{{ act.timestamp }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Threat Detection Timeline</h2>
+    <img src="data:image/png;base64,{{ threat_chart }}" class="chart" alt="Threat Detection Chart">
+
+    <h2>Network Activity</h2>
+    <img src="data:image/png;base64,{{ network_chart }}" class="chart" alt="Network Activity Chart">
+</body>
+</html>

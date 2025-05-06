@@ -1,45 +1,70 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
+{% load humanize %}
 
-{% block title %}Agent {{ agent.agent_id }}{% endblock %}
+{% block title %}Agent {{ agent.agent.agent_id }}{% endblock %}
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/styles1.css' %}">
+<style>
+  .resource-bar {
+    height: 12px !important;
+  }
+
+.dot-glow {
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  box-shadow: 0 0 8px red;
+  animation: glow 1s infinite alternate;
+}
+@keyframes glow {
+  from { box-shadow: 0 0 4px red; }
+  to { box-shadow: 0 0 12px red; }
+}
+
+</style>
 {% endblock %}
 
 {% block content %}
 <main class="content px-3 py-4">
   <div class="container mt-6">
     <div class="container py-4">
-      {# Breadcrumb Navigation #}
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="{% url 'homepage' %}">Dashboard</a></li>
           <li class="breadcrumb-item"><a href="{% url 'agents' %}">Agents</a></li>
-          <li class="breadcrumb-item active" aria-current="page">{{ agent.agent_id }}</li>
+          <li class="breadcrumb-item active" aria-current="page">{{ agent.agent.agent_id }}</li>
         </ol>
       </nav>
 
-      {# Agent Header #}
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-          {% if agent.error %}
-            <div class="alert alert-danger">Error loading agent: {{ agent.error }}</div>
-          {% else %}
-            <h1 class="h2 mb-0">
-              <span class="status-indicator {{ agent.status }}"></span>
-              Agent: <span class="text-primary">{{ agent.agent_id }}</span>
-            </h1>
-            <p class="text-muted mb-0">
-              {{ agent.os }} | Last active: {{ agent.lastActive }}
-            </p>
-          {% endif %}
+          <h1 class="h2 mb-0">
+            <span class="status-indicator {{ agent.agent.status }}"></span>
+            Agent: <span class="text-primary">{{ agent.agent.agent_id }}</span>
+          </h1>
+          <p class="text-muted mb-0">
+            {{ agent.agent.os }} | Last active: {{ agent.agent.lastActive }}
+          </p>
+        </div>
+      </div>
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0 text-danger">Live Network Usage</h5>
+          <div class="d-flex align-items-center">
+            <span class="text-danger fw-bold me-2">LIVE</span>
+            <span class="dot-glow"></span>
+          </div>
+        </div>
+        <div class="card-body" style="height: 300px;">
+          <canvas id="liveAgentNetworkChart" height="120"></canvas>
         </div>
       </div>
 
-      {# Main Content Row #}
       <div class="row g-4">
-        {# Left Column - Agent Details #}
         <div class="col-lg-4">
+          <!-- Agent Info -->
           <div class="card mb-4 shadow-sm">
             <div class="card-header bg-white">
               <h5 class="card-title mb-0"><i class="bi bi-info-circle"></i> Agent Information</h5>
@@ -47,305 +72,254 @@
             <div class="card-body">
               <table class="table table-sm mb-0">
                 <tbody>
-                  <tr><th>Hostname</th>       <td>{{ agent.hostname }}</td></tr>
-                  <tr><th>IP Address</th>     <td>{{ agent.ip }}</td></tr>
-                  <tr><th>Operating System</th><td>{{ agent.os }}</td></tr>
-                  <tr><th>Agent Version</th>  <td>{{ agent.version }}</td></tr>
-                  <tr><th>Last Check-in</th>  <td>{{ agent.lastCheckin }}</td></tr>
+                  <tr><th>Hostname</th><td>{{ agent.agent.hostname }}</td></tr>
+                  <tr><th>IP Address</th><td>{{ agent.agent.ip }}</td></tr>
+                  <tr><th>Operating System</th><td>{{ agent.agent.os }}</td></tr>
+                  <tr><th>Agent Version</th><td>{{ agent.agent.version }}</td></tr>
+                  <tr><th>Last Check-in</th><td>{{ agent.agent.lastCheckin|naturaltime }}</td></tr>
                   <tr>
                     <th>Status</th>
                     <td>
-                      <span class="badge bg-{{ agent.status }}">
-                        {{ agent.status|capfirst }}
+                      <span class="badge {% if agent.agent.status == 'online' %}bg-success{% elif agent.agent.status == 'offline' %}bg-danger{% else %}bg-dark{% endif %}">
+                        {{ agent.agent.status|capfirst }}
                       </span>
                     </td>
                   </tr>
-                  <tr><th>Location</th>       <td>{{ agent.location }}</td></tr>
-                  <tr><th>User</th>           <td>{{ agent.user }}</td></tr>
+                  <tr><th>Location</th><td>{{ agent.agent.location }}</td></tr>
+                  <tr><th>User</th><td>{{ agent.agent.user }}</td></tr>
                 </tbody>
               </table>
             </div>
           </div>
 
+          <!-- Resource Usage -->
           <div class="card mb-4 shadow-sm">
             <div class="card-header bg-white">
               <h5 class="card-title mb-0"><i class="bi bi-speedometer2"></i> Resource Usage</h5>
             </div>
             <div class="card-body">
-              <div class="mt-2">
-                {# You can wire these to context variables if you pass resources in view #}
-                <div class="d-flex justify-content-between mb-1">
-                  <span>CPU: 45%</span>
-                </div>
-                <div class="progress mb-3" style="height:8px;">
-                  <div class="progress-bar bg-warning" role="progressbar" style="width:45%"></div>
-                </div>
-                <div class="d-flex justify-content-between mb-1">
-                  <span>Memory: 78%</span>
-                </div>
-                <div class="progress mb-3" style="height:8px;">
-                  <div class="progress-bar bg-danger" role="progressbar" style="width:78%"></div>
-                </div>
-                <div class="d-flex justify-content-between mb-1">
-                  <span>Disk: 32%</span>
-                </div>
-                <div class="progress" style="height:8px;">
-                  <div class="progress-bar bg-success" role="progressbar" style="width:32%"></div>
-                </div>
-              </div>
+              <canvas id="resourceBars" height="120"></canvas>
             </div>
           </div>
         </div>
 
-        {# Right Column - Charts & Activity (keep as is) #}
         <div class="col-lg-8">
-          <!-- Threat Detection Card -->
+          <!-- Threat Chart -->
           <div class="card mb-4 shadow-sm">
             <div class="card-header bg-white">
-              <h5 class="card-title mb-0"><i class="bi bi-shield-exclamation"></i> Threat Detection (Last 30 Days)</h5>
+              <h5 class="card-title mb-0"><i class="bi bi-shield-exclamation"></i> Threat Detection</h5>
             </div>
             <div class="card-body">
-              <div class="chart-container">
-                <canvas id="threatChart"></canvas>
-              </div>
+              <canvas id="threatChart" height="180"></canvas>
             </div>
           </div>
 
-          <!-- Recent Activity Card -->
+          <!-- Network Activity -->
           <div class="card mb-4 shadow-sm">
-            <div class="card-header bg-white">
-              <h5 class="card-title mb-0"><i class="bi bi-activity"></i> Recent Activity</h5>
-            </div>
-            <div class="card-body p-0">
-              <div class="list-group list-group-flush">
-                {% for act in recentActivity %}
-                  <div class="list-group-item">
-                    <div class="d-flex justify-content-between">
-                      <div>
-                        <span class="badge bg-{{ act.severity|lower }} me-2">{{ act.severity }}</span>
-                        <strong>{{ act.title }}</strong>
-                      </div>
-                      <small class="text-muted">{{ act.timeAgo }}</small>
-                    </div>
-                    <p class="mb-0 small">{{ act.description }}</p>
-                  </div>
-                {% empty %}
-                  <div class="list-group-item text-center text-muted">
-                    No recent activity.
-                  </div>
-                {% endfor %}
-              </div>
-            </div>
-          </div>
-
-          <!-- Network Activity Card -->
-          <div class="card shadow-sm">
             <div class="card-header bg-white">
               <h5 class="card-title mb-0"><i class="bi bi-diagram-3"></i> Network Activity</h5>
             </div>
             <div class="card-body">
-              <div class="chart-container">
-                <canvas id="networkChart"></canvas>
-              </div>
+              <canvas id="networkChart" height="180"></canvas>
             </div>
           </div>
+
+          <!-- Recent Activity as List -->
+          <div class="card shadow-sm">
+            <div class="card-header bg-white">
+              <h5 class="card-title mb-0"><i class="bi bi-activity"></i> Recent Activity</h5>
+            </div>
+            <div class="card-body p-0">
+              <ul class="list-group list-group-flush">
+                {% for act in agent.recentActivity %}
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                  <div class="ms-2 me-auto">
+                    <div class="fw-bold mb-1">
+                      <span class="badge bg-{% if act.severity == 'critical' %}danger{% elif act.severity == 'high' %}warning{% elif act.severity == 'medium' %}info{% else %}success{% endif %} me-2">{{ act.severity|capfirst }}</span>
+                      {{ act.title }}
+                    </div>
+                    <p class="mb-1 text-muted small">{{ act.description }}</p>
+                  </div>
+                  <small class="text-muted text-nowrap">{{ act.timestamp|naturaltime }}</small>
+                </li>
+                {% empty %}
+                <li class="list-group-item text-center text-muted">
+                  No recent activity.
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
   </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Chart initialization functions
-    function initThreatChart(threatData) {
-        const ctx = document.getElementById('threatChart');
-        if (!ctx) return;
-
-        // Process threat data (example structure)
-        const threatCounts = {
-            high: threatData.filter(t => t.severity === 'High').length,
-            medium: threatData.filter(t => t.severity === 'Medium').length,
-            low: threatData.filter(t => t.severity === 'Low').length
-        };
-
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['High', 'Medium', 'Low'],
-                datasets: [{
-                    label: 'Threat Count',
-                    data: [threatCounts.high, threatCounts.medium, threatCounts.low],
-                    backgroundColor: [
-                        'rgba(220, 53, 69, 0.7)',  // High - red
-                        'rgba(255, 193, 7, 0.7)',   // Medium - yellow
-                        'rgba(40, 167, 69, 0.7)'    // Low - green
-                    ],
-                    borderColor: [
-                        'rgba(220, 53, 69, 1)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(40, 167, 69, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            precision: 0
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                }
-            }
-        });
+document.addEventListener('DOMContentLoaded', () => {
+  // Resource Bar Chart
+  new Chart(document.getElementById('resourceBars'), {
+    type: 'bar',
+    data: {
+      labels: ['CPU', 'Memory', 'Disk'],
+      datasets: [{
+        data: [
+          {{ agent.resources.cpu.usage|default:0 }},
+          {{ agent.resources.memory.usage|default:0 }},
+          {{ agent.resources.disk.usage|default:0 }}
+        ],
+        backgroundColor: [
+          'rgba(255, 193, 7, 0.8)',
+          'rgba(220, 53, 69, 0.8)',
+          'rgba(40, 167, 69, 0.8)'
+        ],
+        barThickness: 12,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      scales: {
+        x: { beginAtZero: true, max: 100 },
+        y: { grid: { display: false } }
+      },
+      plugins: { legend: { display: false } },
+      maintainAspectRatio: false
     }
+  });
 
-    function initNetworkChart(networkData) {
-        const ctx = document.getElementById('networkChart');
-        if (!ctx) return;
-
-        // Example network data structure
-        const timestamps = ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '23:59'];
-        const inbound = networkData.inbound || [12, 19, 3, 15, 12, 13, 7];
-        const outbound = networkData.outbound || [8, 12, 5, 9, 15, 10, 12];
-
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: timestamps,
-                datasets: [
-                    {
-                        label: 'Inbound (MB)',
-                        data: inbound,
-                        borderColor: 'rgba(13, 110, 253, 1)',
-                        backgroundColor: 'rgba(13, 110, 253, 0.1)',
-                        tension: 0.3,
-                        fill: true
-                    },
-                    {
-                        label: 'Outbound (MB)',
-                        data: outbound,
-                        borderColor: 'rgba(111, 66, 193, 1)',
-                        backgroundColor: 'rgba(111, 66, 193, 0.1)',
-                        tension: 0.3,
-                        fill: true
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: {
-                    intersect: false,
-                    mode: 'index'
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    }
-
-    function initResourceChart(resourceData) {
-        const ctx = document.getElementById('resourceChart');
-        if (!ctx) return;
-
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['CPU', 'Memory', 'Disk'],
-                datasets: [{
-                    data: [
-                        resourceData.cpu_percent || 0,
-                        resourceData.memory_percent || 0,
-                        resourceData.disk_percent || 0
-                    ],
-                    backgroundColor: [
-                        'rgba(255, 193, 7, 0.8)',  // CPU - yellow
-                        'rgba(220, 53, 69, 0.8)',  // Memory - red
-                        'rgba(40, 167, 69, 0.8)'   // Disk - green
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '70%',
-                plugins: {
-                    legend: {
-                        position: 'bottom'
-                    }
-                }
-            }
-        });
-    }
-
-    // Main initialization function
-    function initAllCharts(agentData) {
-        try {
-            // Initialize all charts
-            initResourceChart(agentData.resource_usage || {});
-            
-            // Threat data from activities
-            const threatData = (agentData.activities || []).filter(a => a.severity);
-            initThreatChart(threatData);
-            
-            // Network data (replace with actual data structure)
-            initNetworkChart({
-                inbound: [12, 19, 3, 15, 12, 13, 7],
-                outbound: [8, 12, 5, 9, 15, 10, 12]
-            });
-            
-        } catch (error) {
-            console.error('Chart initialization failed:', error);
+  // Threat Detection Chart
+  new Chart(document.getElementById('threatChart'), {
+    type: 'bar',
+    data: {
+      labels: {{ agent.threatDetection.timeline.labels|safe }},
+      datasets: [
+        {
+          label: 'Critical',
+          data: {{ agent.threatDetection.timeline.critical|safe }},
+          backgroundColor: 'rgba(220, 53, 69, 0.8)'
+        },
+        {
+          label: 'High',
+          data: {{ agent.threatDetection.timeline.high|safe }},
+          backgroundColor: 'rgba(255, 193, 7, 0.8)'
+        },
+        {
+          label: 'Medium',
+          data: {{ agent.threatDetection.timeline.medium|safe }},
+          backgroundColor: 'rgba(0, 123, 255, 0.8)'
+        },
+        {
+          label: 'Low',
+          data: {{ agent.threatDetection.timeline.low|safe }},
+          backgroundColor: 'rgba(40, 167, 69, 0.8)'
         }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { stacked: false },
+        y: { stacked: false, beginAtZero: true }
+      },
+      plugins: { legend: { position: 'bottom' } }
     }
+  });
 
-    // DOM Content Loaded Handler
-    document.addEventListener('DOMContentLoaded', function() {
-        // Get agent data from template
-        const agentDataEl = document.getElementById('agent-data');
-        if (!agentDataEl) {
-            console.error('Agent data element not found');
-            return;
+  // Network Activity Chart
+  new Chart(document.getElementById('networkChart'), {
+    type: 'line',
+    data: {
+      labels: {{ agent.networkActivity.labels|safe }},
+      datasets: [
+        {
+          label: 'Inbound MB',
+          data: {{ agent.networkActivity.inboundMB|safe }},
+          borderColor: 'rgba(13, 110, 253, 1)',
+          backgroundColor: 'rgba(13, 110, 253, 0.1)',
+          fill: true,
+          tension: 0.3
+        },
+        {
+          label: 'Outbound MB',
+          data: {{ agent.networkActivity.outboundMB|safe }},
+          borderColor: 'rgba(111, 66, 193, 1)',
+          backgroundColor: 'rgba(111, 66, 193, 0.1)',
+          fill: true,
+          tension: 0.3
         }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { intersect: false, mode: 'index' },
+      scales: {
+        y: { beginAtZero: true }
+      },
+      plugins: { legend: { position: 'top' } }
+    }
+  });
+  const labels = [];
+  const usageData = [];
 
-        try {
-            const agentData = JSON.parse(agentDataEl.textContent);
-            initAllCharts(agentData);
-        } catch (error) {
-            console.error('Failed to parse agent data:', error);
+  const ctx = document.getElementById('liveAgentNetworkChart').getContext('2d');
+  const liveChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Network Usage (MB)',
+        data: usageData,
+        borderColor: 'rgb(255, 99, 132)',
+        fill: false,
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'MB'
+          }
         }
-    });
+      }
+    }
+  });
 
-    // Responsive behavior - redraw charts on resize
-    let resizeTimer;
-    window.addEventListener('resize', function() {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function() {
-            const agentDataEl = document.getElementById('agent-data');
-            if (agentDataEl) {
-                try {
-                    const agentData = JSON.parse(agentDataEl.textContent);
-                    initAllCharts(agentData);
-                } catch (error) {
-                    console.error('Resize redraw failed:', error);
-                }
-            }
-        }, 250);
-    });
+  async function fetchAgentLiveNetwork() {
+    try {
+      const response = await fetch("{% url 'agent_realtime_network_api' agent.agent.agent_id %}");
+      const result = await response.json();
+      const now = new Date();
+      const label = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+      labels.push(label);
+      usageData.push(result.usage_mb);
+
+      if (labels.length > 10) {
+        labels.shift();
+        usageData.shift();
+      }
+
+      liveChart.update();
+    } catch (error) {
+      console.error("Agent live network fetch failed", error);
+    }
+  }
+
+  fetchAgentLiveNetwork();
+  setInterval(fetchAgentLiveNetwork, 1000);
+
+});
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}

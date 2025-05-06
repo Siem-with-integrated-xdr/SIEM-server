@@ -14,5 +14,10 @@ urlpatterns = [
     path('moderate/', views.moderate_view, name='moderate'),
     path('low/', views.low_view, name='low'),
     path('agent/<str:agent_id>', views.agent_detail, name='agent'),
+    path('report/', views.report, name='report'),
+    path('report/agent/<str:agent_id>/', views.export_agent_report, name='export_agent_report'),
+    path("dashboard/reports/multi/",views.multi_agent_report, name="multi_agent_report"),
+    path('dashboard/api/realtime-network/', views.realtime_network_api, name='realtime_network_api'),
+    path('dashboard/api/agent/<str:agent_id>/realtime-network/', views.agent_realtime_network, name='agent_realtime_network_api'),
 ]
 

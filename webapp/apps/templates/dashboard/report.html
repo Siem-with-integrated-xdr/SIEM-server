@@ -1,0 +1,120 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %}Reports{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/styles1.css' %}">
+<style>
+  .tab-pane { padding-top: 20px; }
+  .report-btn { min-width: 120px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<main class="content px-3 py-4">
+  <div class="container mt-5">
+    <h2 class="mb-4">Generate Reports</h2>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs" id="reportTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="one-agent-tab" data-bs-toggle="tab" data-bs-target="#one-agent" type="button" role="tab">One Agent</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="multi-agent-tab" data-bs-toggle="tab" data-bs-target="#multi-agent" type="button" role="tab">Multiple Agents</button>
+      </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content mt-3" id="reportTabsContent">
+
+      <!-- One Agent Tab -->
+      <div class="tab-pane fade show active" id="one-agent" role="tabpanel">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Agent ID</th>
+              <th>Hostname</th>
+              <th>Status</th>
+              <th>Location</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for agent in agents %}
+            <tr>
+              <td>{{ agent.agent_id }}</td>
+              <td>{{ agent.hostname }}</td>
+              <td>
+                <span class="badge {% if agent.status == 'online' %}bg-success{% elif agent.status == 'offline' %}bg-danger{% else %}bg-secondary{% endif %}">
+                  {{ agent.status|capfirst }}
+                </span>
+              </td>
+              <td>{{ agent.location }}</td>
+              <td>
+                <a href="{% url 'export_agent_report' agent.agent_id %}" class="btn btn-sm btn-outline-primary report-btn">Export Report</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Multi-Agent Tab -->
+      <div class="tab-pane fade" id="multi-agent" role="tabpanel">
+        <form method="post" action="{% url 'multi_agent_report' %}">
+          {% csrf_token %}
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="include-overview" name="include_overview">
+            <label class="form-check-label" for="include-overview">Include General Overview</label>
+          </div>
+
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="select-all"></th>
+                <th>Agent ID</th>
+                <th>Hostname</th>
+                <th>Status</th>
+                <th>Location</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for agent in agents %}
+              <tr>
+                <td><input type="checkbox" name="agents" value="{{ agent.agent_id }}" class="agent-checkbox"></td>
+                <td>{{ agent.agent_id }}</td>
+                <td>{{ agent.hostname }}</td>
+                <td>
+                  <span class="badge {% if agent.status == 'online' %}bg-success{% elif agent.status == 'offline' %}bg-danger{% else %}bg-secondary{% endif %}">
+                    {{ agent.status|capfirst }}
+                  </span>
+                </td>
+                <td>{{ agent.location }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+          <div class="text-end mt-3">
+            <button type="submit" class="btn btn-primary">Export Report</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const selectAll = document.getElementById('select-all');
+  const checkboxes = document.querySelectorAll('.agent-checkbox');
+  if (selectAll) {
+    selectAll.addEventListener('change', function () {
+      checkboxes.forEach(cb => cb.checked = selectAll.checked);
+    });
+  }
+});
+</script>
+{% endblock %}

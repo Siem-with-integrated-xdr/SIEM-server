@@ -19,6 +19,31 @@
 
     <!-- Custom CSS -->
     {% block css %}
+    <style>
+        .live-indicator {
+            font-weight: bold;
+            color: red;
+            font-size: 1rem;
+        }
+        
+        .live-indicator .dot {
+            height: 10px;
+            width: 10px;
+            margin-left: 6px;
+            background-color: red;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px red;
+            animation: pulse 1.2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0px red; }
+            50% { box-shadow: 0 0 8px red; }
+            100% { box-shadow: 0 0 0px red; }
+        }
+        </style>
+        
     <link rel="stylesheet" href="{% static 'css/styles1.css' %}">
     {% endblock %}
 </head>
@@ -28,6 +53,18 @@
         <div class="container mt-3">  <!-- Fixed mt10 to mt-3 -->
             <div class="mb-3">
                 <h2 class="fw-bold fs-2 mb-4">Admin Dashboard</h2>
+                <div class="card shadow mb-4">
+                <div class="card-body" style="height: 330px; max-height: 330px; padding-bottom: 70px;">
+                    <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 1rem;">
+                        <h5 class="card-title mb-0" style="margin: 0;">Live Network Usage</h5>
+                        <span class="live-indicator" style="margin-left: auto;">
+                            LIVE <span class="dot"></span>
+                        </span>
+                    </div>
+                    <canvas id="liveNetworkChart" height="150"></canvas>
+                </div>
+            </div>
+                
                 
                 <!-- System Health Row -->
                 <div class="row mb-4">
@@ -42,7 +79,7 @@
                                                 Critical
                                             </h3>
                                             <p class="fw-bold mb-2 text-white">
-                                                12
+                                                {{ alert_cards.0.count }}
                                             </p>
                                         </div>
                                     </div>
@@ -56,7 +93,7 @@
                                                 High
                                             </h3>
                                             <p class="fw-bold mb-2 text-dark">
-                                                24
+                                                {{ alert_cards.1.count }}
                                             </p>
                                         </div>
                                     </div>
@@ -70,7 +107,7 @@
                                                 Moderate
                                             </h3>
                                             <p class="fw-bold mb-2 text-white">
-                                                37
+                                                {{ alert_cards.2.count }}
                                             </p>
                                         </div>
                                     </div>
@@ -84,7 +121,7 @@
                                                 Low
                                             </h3>
                                             <p class="fw-bold mb-2 text-white">
-                                                48
+                                                {{ alert_cards.3.count }}
                                             </p>
                                         </div>
                                     </div>
@@ -107,9 +144,8 @@
                                     <canvas id="cpuGauge"></canvas>
                                 </div>
                                 <div class="text-center mt-3">
-                                    <span class="h4 text-warning">45%</span>
-                                    <small class="d-block text-muted">4 cores @ 2.8GHz</small>
-                                    <small class="text-danger"><i class="bx bx-up-arrow-alt"></i> 5% from yesterday</small>
+                                    <span class="h4 text-warning">{{health.cpu.usage}}%</span><br>
+                                    <small class="{% if health.cpu.trend == 'down' %}text-success{% else %}{% if health.cpu.trend_value > 70 %}text-danger{% else %}text-warning{% endif %}{% endif %}"><i class="{% if health.cpu.trend == 'up' %}bx bx-up-arrow-alt{% else %}bx bx-down-arrow-alt{% endif %}"></i> {{health.cpu.trend_value}}% from yesterday</small>
                                 </div>
                             </div>
                             
@@ -123,9 +159,8 @@
                                     <canvas id="memoryGauge"></canvas>
                                 </div>
                                 <div class="text-center mt-3">
-                                    <span class="h4 text-danger">78%</span>
-                                    <small class="d-block text-muted">12.5GB of 16GB</small>
-                                    <small class="text-success"><i class="bx bx-down-arrow-alt"></i> 3% from yesterday</small>
+                                    <span class="h4 text-danger">{{health.memory.usage}}%</span><br>
+                                    <small class="{% if health.memory.trend == 'down' %}text-success{% else %}{% if health.memory.trend_value > 70 %}text-danger{% else %}text-warning{% endif %}{% endif %}"><i class="{% if health.memory.trend == 'up' %}bx bx-up-arrow-alt{% else %}bx bx-down-arrow-alt{% endif %}"></i> {{health.memory.trend_value}}% from yesterday</small>
                                 </div>
                             </div>
                             
@@ -139,9 +174,9 @@
                                     <canvas id="diskGauge"></canvas>
                                 </div>
                                 <div class="text-center mt-3">
-                                    <span class="h4 text-success">32%</span>
-                                    <small class="d-block text-muted">160GB of 500GB</small>
-                                    <small class="text-warning"><i class="bx bx-up-arrow-alt"></i> 2% from yesterday</small>
+                                    <span class="h4 text-success">{{health.disk.usage}}%</span><br>
+                                    <small class="{% if health.disk.trend == 'down' %}text-success{% else %}{% if health.disk.trend_value > 70 %}text-danger{% else %}text-warning{% endif %}{% endif %}
+                                        "><i class="{% if health.disk.trend == 'up' %}bx bx-up-arrow-alt{% else %}bx bx-down-arrow-alt{% endif %}"></i> {{health.disk.trend_value}}% from yesterday</small>
                                 </div>
                             </div>
                             
@@ -152,12 +187,11 @@
                                     <h5 class="card-title mb-0">System Uptime</h5>
                                 </div>
                                 <div class="d-flex flex-column align-items-center justify-content-center" style="height: 150px;">
-                                    <span class="display-5 text-primary center" >18d</span>
-                                    <span class="h4 text-primary">7h</span>
+                                    <span class="display-5 text-primary center" >{{ health.uptime.days }}d</span>
+                                    <span class="h4 text-primary">{{ health.uptime.hours }}h</span>
                                 </div>
                                 <div class="text-center mt-2">
                                     <small class="d-block text-muted">Since last reboot</small>
-                                    <small class="text-success"><i class="bx bx-check-circle"></i> Stable</small>
                                 </div>
                             </div>
                         </div>
@@ -175,45 +209,37 @@
                             <div class="card-body">
                                 <h5 class="card-title">Top Agents by Alert Volume</h5>
                                 <div class="scoreboard">
+                                    {% for agent in top_agents %}
+                                    <a href="{% url 'agent' agent.agent_id %}">
                                     <div class="scoreboard-card mb-3 p-3 rounded">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <span class="badge bg-primary me-2">1</span>
-                                                <span class="agent-score">AG-1001</span>
-                                                <small class="text-muted ms-2">Windows Endpoint</small>
+                                                <span class="badge bg-dark me-2">{{ agent.rank }}</span>
+                                                <span class="agent-score">{{ agent.agent_id }}</span>
                                             </div>
-                                            <span class="badge bg-danger">42 alerts</span>
+                                            <span class="badge 
+                                                {% if agent.severity == 'critical' %}bg-danger
+                                                {% elif agent.severity == 'high' %}bg-warning text-dark
+                                                {% elif agent.severity == 'moderate' %}bg-info
+                                                {% else %}bg-success
+                                                {% endif %}
+                                            ">
+                                                {{ agent.alert_count }} alerts
+                                            </span>
                                         </div>
                                         <div class="progress progress-thin mt-2">
-                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 100%"></div>
-                                        </div>
-                                    </div>
-                                    <div class="scoreboard-card mb-3 p-3 rounded">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <span class="badge bg-secondary me-2">2</span>
-                                                <span class="agent-score">AG-1003</span>
-                                                <small class="text-muted ms-2">Network Sensor</small>
+                                            <div class="progress-bar 
+                                                {% if agent.severity == 'critical' %}bg-danger
+                                                {% elif agent.severity == 'high' %}bg-warning
+                                                {% elif agent.severity == 'moderate' %}bg-info
+                                                {% else %}bg-success
+                                                {% endif %}
+                                            " role="progressbar" style="width: {{ agent.alert_count|floatformat:0 }}%">
                                             </div>
-                                            <span class="badge bg-warning text-dark">28 alerts</span>
-                                        </div>
-                                        <div class="progress progress-thin mt-2">
-                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 67%"></div>
                                         </div>
                                     </div>
-                                    <div class="scoreboard-card mb-3 p-3 rounded">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <span class="badge bg-dark me-2">3</span>
-                                                <span class="agent-score">AG-1005</span>
-                                                <small class="text-muted ms-2">Database Monitor</small>
-                                            </div>
-                                            <span class="badge bg-info">19 alerts</span>
-                                        </div>
-                                        <div class="progress progress-thin mt-2">
-                                            <div class="progress-bar bg-info" role="progressbar" style="width: 45%"></div>
-                                        </div>
-                                    </div>
+                                    </a>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
@@ -226,169 +252,6 @@
                                 <h5 class="card-title mb-4">Network Protocol Distribution</h5>
                                 <div class="chart-container" style="height: 300px;">
                                     <canvas id="protocolChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-    
-                <!-- Users Table -->
-                <!-- Users Table Section -->
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h3 class="fw-bold fs-4 mb-0">Agent Management</h3>
-                            <button class="btn btn-primary btn-sm">
-                                <i class="bx bx-plus"></i> Add Agent
-                            </button>
-                        </div>
-        
-                        <div class="card shadow-sm">
-                            <div class="card-body p-0">
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-hover align-middle mb-0">
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th class="ps-4">Agent ID</th>
-                                                <th>Model</th>
-                                                <th>User</th>
-                                                <th class="text-center">Status</th>
-                                                <th>Last Check-in</th>
-                                                <th class="text-end pe-4">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- Agent 1 -->
-                                            <tr>
-                                                <td class="ps-4 fw-semibold">
-                                                    <a href="/agents/AG-1001" class="text-decoration-none">AG-1001</a>
-                                                </td>
-                                                <td>Windows Endpoint</td>
-                                                <td>jsmith@example.com</td>
-                                                <td class="text-center">
-                                                    <span class="badge bg-success bg-opacity-10 text-success">
-                                                        <i class="bx bx-check-circle"></i> Online
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span class="text-muted">2 minutes ago</span>
-                                                </td>
-                                                <td class="text-end pe-4">
-                                                    <div class="btn-group btn-group-sm">
-                                                        <button class="btn btn-outline-secondary">
-                                                            <i class="bx bx-cog"></i>
-                                                        </button>
-                                                        <button class="btn btn-outline-danger">
-                                                            <i class="bx bx-power-off"></i>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            
-                                            <!-- Agent 2 -->
-                                            <tr>
-                                                <td class="ps-4 fw-semibold">
-                                                    <a href="/agents/AG-1002" class="text-decoration-none">AG-1002</a>
-                                                </td>
-                                                <td>Linux Server</td>
-                                                <td>mjohnson@example.com</td>
-                                                <td class="text-center">
-                                                    <span class="badge bg-danger bg-opacity-10 text-danger">
-                                                        <i class="bx bx-error-circle"></i> Offline
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span class="text-muted">1 hour ago</span>
-                                                </td>
-                                                <td class="text-end pe-4">
-                                                    <div class="btn-group btn-group-sm">
-                                                        <button class="btn btn-outline-secondary">
-                                                            <i class="bx bx-cog"></i>
-                                                        </button>
-                                                        <button class="btn btn-outline-danger">
-                                                            <i class="bx bx-power-off"></i>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            
-                                            <!-- Agent 3 -->
-                                            <tr>
-                                                <td class="ps-4 fw-semibold">
-                                                    <a href="/agents/AG-1003" class="text-decoration-none">AG-1003</a>
-                                                </td>
-                                                <td>Network Sensor</td>
-                                                <td>system@domain.com</td>
-                                                <td class="text-center">
-                                                    <span class="badge bg-success bg-opacity-10 text-success">
-                                                        <i class="bx bx-check-circle"></i> Online
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span class="text-muted">5 minutes ago</span>
-                                                </td>
-                                                <td class="text-end pe-4">
-                                                    <div class="btn-group btn-group-sm">
-                                                        <button class="btn btn-outline-secondary">
-                                                            <i class="bx bx-cog"></i>
-                                                        </button>
-                                                        <button class="btn btn-outline-danger">
-                                                            <i class="bx bx-power-off"></i>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            
-                                            <!-- Agent 4 -->
-                                            <tr>
-                                                <td class="ps-4 fw-semibold">
-                                                    <a href="/agents/AG-1004" class="text-decoration-none">AG-1004</a>
-                                                </td>
-                                                <td>Cloud Collector</td>
-                                                <td>awilliams@example.com</td>
-                                                <td class="text-center">
-                                                    <span class="badge bg-warning bg-opacity-10 text-warning">
-                                                        <i class="bx bx-time"></i> Unstable
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span class="text-muted">15 minutes ago</span>
-                                                </td>
-                                                <td class="text-end pe-4">
-                                                    <div class="btn-group btn-group-sm">
-                                                        <button class="btn btn-outline-secondary">
-                                                            <i class="bx bx-cog"></i>
-                                                        </button>
-                                                        <button class="btn btn-outline-danger">
-                                                            <i class="bx bx-power-off"></i>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-            
-                            <!-- Table Footer with Pagination -->
-                            <div class="card-footer bg-white border-top">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="text-muted small">
-                                        Showing 1 to 4 of 10 entries
-                                    </div>
-                                    <nav>
-                                        <ul class="pagination pagination-sm mb-0">
-                                            <li class="page-item disabled">
-                                                <a class="page-link" href="#" tabindex="-1">Previous</a>
-                                            </li>
-                                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                            <li class="page-item">
-                                                <a class="page-link" href="#">Next</a>
-                                            </li>
-                                        </ul>
-                                    </nav>
                                 </div>
                             </div>
                         </div>
@@ -431,11 +294,14 @@
                     }
                 });
             }
-        
+            const cg = {{health.cpu.usage}};
+            const mg = {{health.memory.usage}};
+            const dg = {{health.disk.usage}};
+
             // Create gauge charts
-            createGauge('cpuGauge', 45, '#ffc107');
-            createGauge('memoryGauge', 78, '#dc3545');
-            createGauge('diskGauge', 32, '#28a745');
+            createGauge('cpuGauge', cg, '#ffc107');
+            createGauge('memoryGauge', mg, '#dc3545');
+            createGauge('diskGauge', dg, '#28a745');
         
             // Protocols 
             function createProtocolChart() {
@@ -444,20 +310,12 @@
 
                 // Sample data - replace with your actual data
                 const protocolData = {
-                    labels: ['HTTP', 'HTTPS', 'DNS', 'SSH', 'FTP', 'SMTP', 'Other'],
+                    labels: {{ protocols.labels|safe }},
                     datasets: [
                         {
-                            label: 'Inbound',
-                            data: [120, 180, 80, 45, 30, 25, 50],
+                            data: {{ protocols.data|safe }},
                             backgroundColor: 'rgba(54, 162, 235, 0.8)',
                             borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Outbound',
-                            data: [90, 150, 60, 30, 20, 15, 40],
-                            backgroundColor: 'rgba(255, 99, 132, 0.8)',
-                            borderColor: 'rgba(255, 99, 132, 1)',
                             borderWidth: 1
                         }
                     ]
@@ -487,7 +345,7 @@
                         },
                         plugins: {
                             legend: {
-                                position: 'top',
+                                display: false,
                             },
                             tooltip: {
                                 callbacks: {
@@ -503,6 +361,64 @@
                 });
             }
             createProtocolChart();
+            const labels = [];
+            const usageData = [];
+
+            const ctx = document.getElementById('liveNetworkChart').getContext('2d');
+            const liveChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Network Usage (KB)',
+                        data: usageData,
+                        borderColor: 'rgb(75, 192, 192)',
+                        fill: false,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'KB'
+                            }
+                        }
+                    }
+                }
+            });
+
+            async function fetchAndUpdate() {
+                try {
+                    const response = await fetch('{% url 'realtime_network_api' %}');
+                    const result = await response.json();
+
+                    const now = new Date();
+                    const timeLabel = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+                    labels.push(timeLabel);
+                    usageData.push(result.usage_kb);
+
+                    if (labels.length > 10) {
+                        labels.shift();
+                        usageData.shift();
+                    }
+
+                    liveChart.update();  // 🔁 Only update
+                } catch (err) {
+                    console.error('Fetch error:', err);
+                }
+            }
+
+            // Fetch every 5 seconds
+            fetchAndUpdate();
+            setInterval(fetchAndUpdate, 1000);
+
         });
         </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

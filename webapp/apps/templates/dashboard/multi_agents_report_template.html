@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 13px; }
+    h2 { background-color: #eee; padding: 8px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
+    img.chart { width: 350px; height: auto; margin-bottom: 20px; border: 1px solid #ccc; }
+</style>
+</head>
+<body>
+  <h2>Multi-Agent Report</h2>
+  <p>Generated: {{ timestamp }}</p>
+
+  <h2>Overview</h2>
+  <img src="data:image/png;base64,{{ charts.internet_usage }}" class="chart" alt="internet_usage">
+  <img src="data:image/png;base64,{{ charts.resource_usage }}" class="chart" alt="resource_usage">
+  <br>
+  <img src="data:image/png;base64,{{ charts.user_activity }}" class="chart" alt="user_activity">
+  <img src="data:image/png;base64,{{ charts.security_alerts }}" class="chart" alt="security_alerts">
+  <br>
+  <img src="data:image/png;base64,{{ charts.network_distribution }}" class="chart" alt="network_distribution">
+  <img src="data:image/png;base64,{{ charts.attacks_distribution }}" class="chart" alt="attacks_distribution">
+  <br>
+  <img src="data:image/png;base64,{{ charts.protocol_distribution }}" class="chart" alt="protocol_distribution">
+
+  <h2>Included Agents ({{ agents|length }})</h2>
+  <ul>
+    {% for agent in agents %}
+      <li>{{ agent.agent.agent_id }}</li>
+    {% endfor %}
+  </ul>
+
+  {% for agent in agents %}
+    <h2>Agent: {{ agent.agent.agent_id }}</h2>
+    <table>
+      <tr><th>Hostname</th><td>{{ agent.agent.hostname }}</td></tr>
+      <tr><th>IP</th><td>{{ agent.agent.ip }}</td></tr>
+      <tr><th>OS</th><td>{{ agent.agent.os }}</td></tr>
+      <tr><th>Status</th><td>{{ agent.agent.status }}</td></tr>
+      <tr><th>Last Check-in</th><td>{{ agent.agent.lastCheckin }}</td></tr>
+      <tr><th>User</th><td>{{ agent.agent.user }}</td></tr>
+    </table>
+
+    <p><strong>CPU:</strong> {{ agent.resources.cpu.usage }}% |
+       <strong>Memory:</strong> {{ agent.resources.memory.usage }}% |
+       <strong>Disk:</strong> {{ agent.resources.disk.usage }}%</p>
+
+    <h3>Recent Activities</h3>
+    <table>
+      <tr><th>Severity</th><th>Title</th><th>Description</th><th>Time</th></tr>
+      {% for act in agent.recentActivity %}
+      <tr>
+        <td>{{ act.severity }}</td>
+        <td>{{ act.title }}</td>
+        <td>{{ act.description }}</td>
+        <td>{{ act.timestamp }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    <h2>Threat Detection Timeline</h2>
+    <img src="data:image/png;base64,{{ agent.threat_chart }}" class="chart" alt="threat_chart">
+
+    <h2>Network Activity</h2>
+    <img src="data:image/png;base64,{{ agent.network_chart }}" class="chart" alt="network_chart">
+  {% endfor %}
+</body>
+</html>

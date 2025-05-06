@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django_bootstrap5',
     'apps.dashboard',
     'debug_toolbar',
+    'django.contrib.humanize',
     'corsheaders'
 ]
 
